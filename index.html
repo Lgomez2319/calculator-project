@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Project</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+* {
+  box-sizing: border-box;
+  /*     display: flex; */
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/8f730b7a-3cfe-45f3-bd4f-a3553538a548/d4a6hvp-867c00e0-9d76-4ef7-bd5d-2727a5d2559f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzhmNzMwYjdhLTNjZmUtNDVmMy1iZDRmLWEzNTUzNTM4YTU0OFwvZDRhNmh2cC04NjdjMDBlMC05ZDc2LTRlZjctYmQ1ZC0yNzI3YTVkMjU1OWYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.9hg1H-bqXYn1CKCvJJAEiK4ME5ROrwxIr1b2wJGa83Q);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+div#calculator {
+  font-size: 0;
+  width: 30%;
+  height: 85%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  justify-context: center;
+  background-color: #25afa1;
+  border-radius: 6%;
+  margin: auto;
+  padding: 2%;
+  box-sizing: border-box;
+}
+
+input#display {
+  background-color: #d2e9ec;
+  border-radius: 6%;
+  width: 100%;
+  height: 30vh;
+  font-size: calc(4vw + 4vh);
+  text-align: right;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+  font-family: "Press_Start_2P";
+  font-size: 1.5rem;
+  margin-top: -1%;
+  margin-bottom: -4%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 2.5%;
+}
+
+.button-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  height: 10%;
+  gap: 2%;
+}
+
+/* Numbers bottom */
+#buttons1 {
+  width: 100%;
+  height: 45%;
+  gap: 2%;
+}
+
+#buttons2 {
+  width: 100%;
+}
+
+.number-button {
+  flex: 1 0 30%;
+  border-radius: 3px;
+  background: #eae66f;
+  border: 2px solid #000;
+  font-weight: bold;
+  font-family: "Bree Serif", serif;
+}
+
+.input-button {
+  cursor: pointer;
+  font-size: calc(2vw + 1vh);
+  overflow: hidden;
+}
+
+.operator {
+  border-radius: 3px;
+  flex: 1 0 15%;
+  text-align: center;
+  background-color: #f8ce6d;
+  font-size: 1.12rem;
+  font-weight: bold;
+  border: 2px solid #000;
+}
+
+#equal {
+  border: 2px solid #000;
+  background: #ec4840;
+  border-radius: 50px;
+  font-size: 2.5rem;
+  text-align: center;
+  height: 25%;
+  flex: 0 0 66%;
+  order: 10;
+}
+
+    </style>
+</head>
+<body>
+    <div id="calculator">
+  <input type="text" id="display" maxLength="10" disabled>
+
+  <h1>BMO</h1>
+
+  <div class="button-area" id="buttons2">
+    <button class="operator input-button" data-value="+" id="add" type="button">+</button>
+    <button class="operator input-button" data-value="-" id="subtract" type="button">-</button>
+    <button class="operator input-button" data-value="*" id="multiply" type="button">*</button>
+    <button class="operator input-button" data-value="/" id="divide" type="button">/</button>
+    <button class="operator input-button" id="clear" type="button">CE</button>
+  </div>
+
+  <div class="button-area" id="buttons1">
+    <button id="equal" type="button">=</button>
+  </div>
+
+</div>
+
+    <script>
+        const calculator = document.getElementById("calculator");
+const resultDisplay = document.getElementById("display");
+const buttons1 = document.getElementById("buttons1");
+const clearButton = document.getElementById("clear");
+const equalButton = document.getElementById("equal");
+const addButton = document.getElementById("add");
+const minusButton = document.getElementById("subtract");
+const divideButton = document.getElementById("divide");
+const multiplyButton = document.getElementById("multiply");
+let maxLength = resultDisplay.getAttribute("maxLength");
+resultDisplay.value = "0";
+
+let tempNumber = null;
+let firstNumber = null;
+let secondNumber = null;
+let operation = null;
+let result = null;
+
+// Creating the buttons for numbers
+for (let i = 0; i < 10; i++) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.classList.add("number-button");
+  button.classList.add("input-button");
+  button.textContent = i;
+  button.setAttribute("data-value", i);
+  if (i === 0) {
+    button.style.order = 1;
+  }
+  buttons1.appendChild(button);
+}
+
+const numberButtons = document.querySelectorAll(".number-button");
+numberButtons.forEach((button, index) => {
+  let dataValue = parseInt(button.getAttribute("data-value"));
+
+  button.addEventListener("click", function (event) {
+    if (resultDisplay.value.length < maxLength) {
+      if (operation === null) {
+        if (firstNumber === null || firstNumber === 0) {
+          firstNumber = dataValue;
+        } else {
+          firstNumber = parseInt(firstNumber.toString().concat(dataValue));
+        }
+        resultDisplay.value = firstNumber.toString();
+      } else {
+        if (secondNumber === null || secondNumber === 0) {
+          secondNumber = dataValue;
+        } else {
+          secondNumber = parseInt(secondNumber.toString().concat(dataValue));
+        }
+        resultDisplay.value = secondNumber.toString();
+      }
+    }
+  });
+});
+
+let colors = [
+  "#3042A6",
+  "#6ED07B",
+  "",
+  "#3042A6",
+  "",
+  "",
+  "",
+  "#3042A6",
+  "",
+  "#6CE5CF"
+];
+
+numberButtons.forEach((button, index) => {
+  button.style.backgroundColor = colors[index];
+});
+
+function clearValues() {
+  tempNumber = null;
+  firstNumber = null;
+  secondNumber = null;
+  operation = null;
+  result = null;
+  resultDisplay.value = 0;
+}
+
+clearButton.addEventListener("click", function () {
+  clearValues();
+});
+
+const operatorButtons = document.querySelectorAll(".operator");
+
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", function (event) {
+    const thisOperation = event.target.id;
+    console.log(thisOperation);
+
+    if (firstNumber !== null && secondNumber === null) {
+      switch (thisOperation) {
+        case "add":
+          operation = "+";
+          break;
+        case "subtract":
+          operation = "-";
+          break;
+        case "multiply":
+          operation = "*";
+          break;
+        case "divide":
+          operation = "/";
+          break;
+      }
+      resultDisplay.value = operation;
+    }
+  });
+});
+
+equalButton.addEventListener("click", function (event) {
+  if (secondNumber !== null) {
+    switch (operation) {
+      case "+":
+        result = firstNumber + secondNumber;
+        break;
+
+      case "-":
+        result = firstNumber - secondNumber;
+        break;
+
+      case "*":
+        result = firstNumber * secondNumber;
+        break;
+
+      case "/":
+        result = firstNumber / secondNumber;
+        break;
+    }
+    resultDisplay.value = result;
+  }
+});
+
+    </script>
+</body>
+</html>
